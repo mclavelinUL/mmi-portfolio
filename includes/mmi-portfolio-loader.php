@@ -1,4 +1,6 @@
 <?php
+// Load dependencies
+
 include_once plugin_dir_path( __FILE__ ) . '/../vendor/advanced-custom-fields-pro/acf.php';
 
 if ( ! function_exists( 'is_plugin_active' ) ) {

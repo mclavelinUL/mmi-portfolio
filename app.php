@@ -13,4 +13,7 @@ if (!defined('ABSPATH')) {
 
 // Load dependencies
 require_once plugin_dir_path(__FILE__) . 'includes/mmi-portfolio-loader.php';
+
+// Init data 
+require_once plugin_dir_path(__FILE__) . 'data/mmi-portfolio-data.php';
 //echo plugin_dir_path(__FILE__) . 'includes/mmi-portfolio-loader.php';
