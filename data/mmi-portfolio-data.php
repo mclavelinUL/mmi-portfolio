@@ -725,3 +725,53 @@ add_action( 'init', function() {
 ) );
 } );
 
+function xml_import(){
+	$xml = simplexml_load_file(__DIR__ . '/all_content.xml','SimpleXMLElement', LIBXML_NOCDATA);
+	$xml->registerXPathNamespace('wp', 'http://wordpress.org/export/1.2/');
+	$terms = $xml->channel->xpath('//wp:term');
+	$items = $xml->channel->xpath('//item');
+	$taxonomies = array(
+		'competence',
+		'domaine',
+		'niveau',
+	);
+	
+	foreach($terms as $term){
+		//Get value of wp:term_name inside this node
+		$term_name = $term->xpath('wp:term_name');
+		$term_taxonomy = $term->xpath('wp:term_taxonomy');
+		// Check if term exists
+		
+		$term_exists = term_exists((string)$term_name[0], (string)$term_taxonomy[0]);
+		// Create term if it doesn't exist
+		if(!$term_exists && in_array($term_taxonomy[0], $taxonomies)){
+			$term_id = wp_insert_term((string)$term_name[0], (string)$term_taxonomy[0]);
+			
+		}	
+	}
+	
+	foreach($items as $item){
+		$post_type = (string)$item->xpath('wp:post_type')[0];
+		$post_title = (string)$item->title;
+		// Check if post exists
+		$post_exists = post_exists($post_title);
+		if($post_type == 'ac' && !$post_exists){
+			$level = (string)$item->xpath('category[@domain="niveau"]')[0]['nicename'][0];
+			$skill = (string)$item->xpath('category[@domain="competence"]')[0]['nicename'][0];
+			// Create post 
+			$post_id = wp_insert_post(array(
+				'post_title' => $post_title,
+				'post_type' => $post_type,
+				'post_status' => 'publish',
+			));
+			// Add terms to post
+			wp_set_post_terms($post_id, $level, 'niveau');
+			wp_set_post_terms($post_id, $skill, 'competence');
+		}
+		
+		
+	}
+	
+	
+}
+add_action('wp', 'xml_import');
