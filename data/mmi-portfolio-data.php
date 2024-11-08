@@ -753,20 +753,38 @@ function xml_import(){
 	foreach($items as $item){
 		$post_type = (string)$item->xpath('wp:post_type')[0];
 		$post_title = (string)$item->title;
+		$post_content = (string)$item->xpath('content:encoded')[0];
+		$post_meta = $item->xpath('wp:postmeta');
+		
+		
 		// Check if post exists
 		$post_exists = post_exists($post_title);
 		if($post_type == 'ac' && !$post_exists){
 			$level = (string)$item->xpath('category[@domain="niveau"]')[0]['nicename'][0];
 			$skill = (string)$item->xpath('category[@domain="competence"]')[0]['nicename'][0];
+			
 			// Create post 
 			$post_id = wp_insert_post(array(
 				'post_title' => $post_title,
 				'post_type' => $post_type,
+				'post_content' => $post_content,
 				'post_status' => 'publish',
 			));
 			// Add terms to post
 			wp_set_post_terms($post_id, $level, 'niveau');
 			wp_set_post_terms($post_id, $skill, 'competence');
+			// Add meta
+			foreach($post_meta as $meta){
+				$meta_key = (string)$meta->xpath('wp:meta_key')[0];
+				$meta_value = (string)$meta->xpath('wp:meta_value')[0];
+				if($meta_key == 'competence'){
+					update_field('competence', $meta_value, $post_id);
+				}
+				if($meta_key == 'niveau'){
+					update_field('niveau', $meta_value, $post_id);
+				}
+				
+			}
 		}
 		
 		
