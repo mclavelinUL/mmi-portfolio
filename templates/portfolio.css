@@ -1,0 +1,251 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+:root {
+  --background-gradient: linear-gradient(178deg, #ffff33 10%, #3333ff);
+  --gray: #34495e;
+  --darkgray: #2c3e50;
+  --lightgrey: #909ba7;
+}
+
+main.portfolio-pedagogique-archive {
+  box-sizing: border-box;
+  font-family: "Raleway", sans-serif;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 10px;
+}
+main.portfolio-pedagogique-archive * {
+  box-sizing: border-box;
+}
+main.portfolio-pedagogique-archive h1 {
+  color: black;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+main.portfolio-pedagogique-archive section.filtres {
+  margin-bottom: 1rem;
+}
+main.portfolio-pedagogique-archive section.filtres fieldset {
+  all: unset;
+  position: relative;
+  /* Remove IE arrow */
+  /* Custom Select wrapper */
+  /* Arrow */
+  /* Transition */
+}
+main.portfolio-pedagogique-archive section.filtres fieldset select {
+  /* Reset Select */
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  outline: 10px red;
+  border: 0;
+  box-shadow: none;
+  /* Personalize */
+  flex: 1;
+  padding: 0 1em;
+  color: #fff;
+  background-color: var(--darkgray);
+  background-image: none;
+  cursor: pointer;
+}
+main.portfolio-pedagogique-archive section.filtres fieldset select::-ms-expand {
+  display: none;
+}
+main.portfolio-pedagogique-archive section.filtres fieldset .select {
+  position: relative;
+  display: flex;
+  width: 20em;
+  height: 3em;
+  border-radius: 0.25em;
+  overflow: hidden;
+}
+main.portfolio-pedagogique-archive section.filtres fieldset .select::after {
+  content: "▼";
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1em;
+  background-color: #34495e;
+  transition: 0.25s all ease;
+  pointer-events: none;
+}
+main.portfolio-pedagogique-archive section.filtres fieldset .select:hover::after {
+  color: #f39c12;
+}
+main.portfolio-pedagogique-archive section.realisations {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+main.portfolio-pedagogique-archive section.realisations a {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: var(--grey);
+  text-shadow: 1px 0px 0px #FFF, 0px 1px 0px #FFF, -1px 0px 0px #FFF, 0px -1px 0px #FFF;
+  transition: all 0.3s;
+}
+main.portfolio-pedagogique-archive section.realisations a:hover {
+  color: var(--darkgray);
+}
+main.portfolio-pedagogique-archive section.realisations a:hover article::before {
+  opacity: 0;
+}
+main.portfolio-pedagogique-archive section.realisations a:hover h2 {
+  transform: translateY(-20px);
+}
+main.portfolio-pedagogique-archive section.realisations article {
+  width: 100%;
+  min-height: 40vw;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+main.portfolio-pedagogique-archive section.realisations article::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+main.portfolio-pedagogique-archive section.realisations article h2 {
+  transform: translateY(0px);
+  transition: transform 0.3s;
+}
+main.portfolio-pedagogique-archive section.realisations article h2 span {
+  display: block;
+  font-size: 1rem;
+}
+
+main.portfolio-pedagogique-single {
+  box-sizing: border-box;
+  overflow-x: hidden;
+  font-family: "Raleway", sans-serif;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+main.portfolio-pedagogique-single * {
+  box-sizing: border-box;
+}
+main.portfolio-pedagogique-single .hero {
+  height: 60vh;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+main.portfolio-pedagogique-single .hero h1 {
+  text-shadow: 1px 0px 0px #FFF, 0px 1px 0px #FFF, -1px 0px 0px #FFF, 0px -1px 0px #FFF;
+}
+main.portfolio-pedagogique-single > section {
+  padding: 10px;
+}
+main.portfolio-pedagogique-single > section.header {
+  background-color: var(--darkgray);
+  color: white;
+}
+main.portfolio-pedagogique-single > section.header svg {
+  filter: invert(1);
+}
+main.portfolio-pedagogique-single > section.traces {
+  position: relative;
+  padding-right: 1%;
+}
+main.portfolio-pedagogique-single > section.traces .submenu {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 400px;
+  height: auto;
+  padding: 1rem;
+  padding-left: 40px;
+  background-color: var(--lightgrey);
+  border-radius: 5px;
+  transform: translateX(90%);
+  transition: transform 0.3s;
+  z-index: 11000;
+}
+main.portfolio-pedagogique-single > section.traces .submenu .bt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  background-color: var(--darkgray);
+  color: white;
+  padding: 10px;
+  padding-top: 13px;
+}
+main.portfolio-pedagogique-single > section.traces .submenu .bt span {
+  display: block;
+  height: 2px;
+  background-color: white;
+  margin-bottom: 3px;
+  transform: translateY(0);
+  transition: transform 0.3s;
+}
+main.portfolio-pedagogique-single > section.traces .submenu:hover {
+  transform: translateX(0);
+}
+main.portfolio-pedagogique-single > section.traces .submenu:hover .bt span:first-child {
+  transform: translateY(5px);
+}
+main.portfolio-pedagogique-single > section.traces .submenu:hover .bt span:last-child {
+  transform: translateY(-5px);
+}
+main.portfolio-pedagogique-single > section.traces .submenu ul {
+  list-style-type: square;
+  padding-left: 1rem;
+}
+main.portfolio-pedagogique-single > section.traces .submenu ul li {
+  margin-bottom: 0.5rem;
+}
+main.portfolio-pedagogique-single > section.traces .submenu ul li a {
+  color: var(--darkgray);
+  font-weight: 600;
+  text-decoration: none;
+}
+main.portfolio-pedagogique-single > section.traces .submenu ul li a:hover {
+  color: var(--gray);
+}
+main.portfolio-pedagogique-single > section.traces article header {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+main.portfolio-pedagogique-single > section.traces article .niveau_estime {
+  min-width: 100px;
+}
+main.portfolio-pedagogique-single > section.traces article .niveau_estime .checked {
+  color: orange;
+}
+main.portfolio-pedagogique-single > section.traces article .external_link {
+  color: var(--darkgray);
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+main.portfolio-pedagogique-single .meta {
+  display: flex;
+  justify-content: space-between;
+}
+main.portfolio-pedagogique-single .meta > p {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 600;
+}/*# sourceMappingURL=portfolio.css.map */

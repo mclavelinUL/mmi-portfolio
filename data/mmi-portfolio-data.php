@@ -1,5 +1,7 @@
 <?php
 
+
+
 add_action( 'acf/include_fields', function() {
 	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
 		return;
@@ -386,6 +388,99 @@ add_action( 'acf/include_fields', function() {
 			'ui_off_text' => '',
 		),
 		array(
+			'key' => 'field_66f566556f969',
+			'label' => 'Titre alternatif',
+			'name' => 'titre',
+			'aria-label' => '',
+			'type' => 'text',
+			'instructions' => '',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array(
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
+			'default_value' => '',
+			'maxlength' => '',
+			'placeholder' => '',
+			'prepend' => '',
+			'append' => '',
+		),
+		array(
+			'key' => 'field_66f56fead1319',
+			'label' => 'Image à la une',
+			'name' => 'image_a_la_une',
+			'aria-label' => '',
+			'type' => 'image',
+			'instructions' => '',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array(
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
+			'return_format' => 'array',
+			'library' => 'all',
+			'min_width' => '',
+			'min_height' => '',
+			'min_size' => '',
+			'max_width' => '',
+			'max_height' => '',
+			'max_size' => '',
+			'mime_types' => '',
+			'preview_size' => 'medium',
+		),
+		array(
+			'key' => 'field_66f5668a6f96a',
+			'label' => 'Description alternative',
+			'name' => 'description',
+			'aria-label' => '',
+			'type' => 'wysiwyg',
+			'instructions' => '',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array(
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
+			'default_value' => '',
+			'tabs' => 'all',
+			'toolbar' => 'full',
+			'media_upload' => 1,
+			'delay' => 0,
+		),
+		array(
+			'key' => 'field_66d70f08cee37',
+			'label' => 'Galerie',
+			'name' => 'galerie',
+			'aria-label' => '',
+			'type' => 'gallery',
+			'instructions' => '',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array(
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
+			'return_format' => 'array',
+			'library' => 'all',
+			'min' => '',
+			'max' => '',
+			'min_width' => '',
+			'min_height' => '',
+			'min_size' => '',
+			'max_width' => '',
+			'max_height' => '',
+			'max_size' => '',
+			'mime_types' => '',
+			'insert' => 'append',
+			'preview_size' => 'medium',
+		),
+		array(
 			'key' => 'field_66d70deecee36',
 			'label' => 'Pro',
 			'name' => 'pro',
@@ -409,99 +504,6 @@ add_action( 'acf/include_fields', function() {
 			),
 			'layout' => 'block',
 			'sub_fields' => array(
-				array(
-					'key' => 'field_66f566556f969',
-					'label' => 'Titre alternatif',
-					'name' => 'titre',
-					'aria-label' => '',
-					'type' => 'text',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
-					'wrapper' => array(
-						'width' => '',
-						'class' => '',
-						'id' => '',
-					),
-					'default_value' => '',
-					'maxlength' => '',
-					'placeholder' => '',
-					'prepend' => '',
-					'append' => '',
-				),
-				array(
-					'key' => 'field_66f56fead1319',
-					'label' => 'Image à la une',
-					'name' => 'image_a_la_une',
-					'aria-label' => '',
-					'type' => 'image',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
-					'wrapper' => array(
-						'width' => '',
-						'class' => '',
-						'id' => '',
-					),
-					'return_format' => 'array',
-					'library' => 'all',
-					'min_width' => '',
-					'min_height' => '',
-					'min_size' => '',
-					'max_width' => '',
-					'max_height' => '',
-					'max_size' => '',
-					'mime_types' => '',
-					'preview_size' => 'medium',
-				),
-				array(
-					'key' => 'field_66f5668a6f96a',
-					'label' => 'Description alternative',
-					'name' => 'description',
-					'aria-label' => '',
-					'type' => 'wysiwyg',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
-					'wrapper' => array(
-						'width' => '',
-						'class' => '',
-						'id' => '',
-					),
-					'default_value' => '',
-					'tabs' => 'all',
-					'toolbar' => 'full',
-					'media_upload' => 1,
-					'delay' => 0,
-				),
-				array(
-					'key' => 'field_66d70f08cee37',
-					'label' => 'Galerie',
-					'name' => 'galerie',
-					'aria-label' => '',
-					'type' => 'gallery',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
-					'wrapper' => array(
-						'width' => '',
-						'class' => '',
-						'id' => '',
-					),
-					'return_format' => 'array',
-					'library' => 'all',
-					'min' => '',
-					'max' => '',
-					'min_width' => '',
-					'min_height' => '',
-					'min_size' => '',
-					'max_width' => '',
-					'max_height' => '',
-					'max_size' => '',
-					'mime_types' => '',
-					'insert' => 'append',
-					'preview_size' => 'medium',
-				),
 			),
 		),
 	),
@@ -510,7 +512,7 @@ add_action( 'acf/include_fields', function() {
 			array(
 				'param' => 'post_type',
 				'operator' => '==',
-				'value' => 'realisation',
+				'value' => 'realisation-mmi',
 			),
 		),
 	),
@@ -529,6 +531,7 @@ add_action( 'acf/include_fields', function() {
 add_action( 'init', function() {
 	register_taxonomy( 'competence', array(
 	0 => 'ac',
+	1 => 'realisation',
 ), array(
 	'labels' => array(
 		'name' => 'Compétences',
@@ -541,10 +544,6 @@ add_action( 'init', function() {
 		'add_new_item' => 'Ajouter Compétence',
 		'new_item_name' => 'Nom du nouveau Compétence',
 		'search_items' => 'Rechercher Compétences',
-		'popular_items' => 'Compétences populaire',
-		'separate_items_with_commas' => 'Séparer les compétences avec une virgule',
-		'add_or_remove_items' => 'Ajouter ou retirer compétences',
-		'choose_from_most_used' => 'Choisir parmi les compétences les plus utilisés',
 		'not_found' => 'Aucun compétences trouvé',
 		'no_terms' => 'Aucun compétences',
 		'items_list_navigation' => 'Navigation dans la liste Compétences',
@@ -554,6 +553,7 @@ add_action( 'init', function() {
 		'item_link_description' => 'Un lien vers un compétence',
 	),
 	'public' => false,
+	'hierarchical' => true,
 	'publicly_queryable' => true,
 	'show_ui' => true,
 	'show_in_menu' => true,
@@ -596,6 +596,7 @@ add_action( 'init', function() {
 
 	register_taxonomy( 'niveau', array(
 	0 => 'ac',
+	1 => 'realisation',
 ), array(
 	'labels' => array(
 		'name' => 'Niveaux',
@@ -608,10 +609,6 @@ add_action( 'init', function() {
 		'add_new_item' => 'Ajouter Niveau',
 		'new_item_name' => 'Nom du nouveau Niveau',
 		'search_items' => 'Rechercher Niveaux',
-		'popular_items' => 'Niveaux populaire',
-		'separate_items_with_commas' => 'Séparer les niveaux avec une virgule',
-		'add_or_remove_items' => 'Ajouter ou retirer niveaux',
-		'choose_from_most_used' => 'Choisir parmi les niveaux les plus utilisés',
 		'not_found' => 'Aucun niveaux trouvé',
 		'no_terms' => 'Aucun niveaux',
 		'items_list_navigation' => 'Navigation dans la liste Niveaux',
@@ -621,6 +618,7 @@ add_action( 'init', function() {
 		'item_link_description' => 'Un lien vers un niveau',
 	),
 	'public' => false,
+	'hierarchical' => true,
 	'publicly_queryable' => true,
 	'show_ui' => true,
 	'show_in_menu' => true,
@@ -675,7 +673,7 @@ add_action( 'init', function() {
 	'delete_with_user' => false,
 ) );
 
-	register_post_type( 'realisation', array(
+	register_post_type( 'realisation-mmi', array(
 	'labels' => array(
 		'name' => 'Réalisations',
 		'singular_name' => 'Réalisation',
@@ -716,6 +714,11 @@ add_action( 'init', function() {
 		2 => 'thumbnail',
 		3 => 'custom-fields',
 	),
+	'taxonomies' => array(
+		0 => 'competence',
+		1 => 'niveau',
+		2 => 'domaine',
+	),
 	'has_archive' => true,
 	'rewrite' => array(
 		'with_front' => false,
@@ -724,6 +727,8 @@ add_action( 'init', function() {
 	'delete_with_user' => false,
 ) );
 } );
+
+
 
 function xml_import(){
 	$xml = simplexml_load_file(__DIR__ . '/all_content.xml','SimpleXMLElement', LIBXML_NOCDATA);
@@ -747,7 +752,8 @@ function xml_import(){
 		if(!$term_exists && in_array($term_taxonomy[0], $taxonomies)){
 			$term_id = wp_insert_term((string)$term_name[0], (string)$term_taxonomy[0]);
 			
-		}	
+		}
+		
 	}
 	
 	foreach($items as $item){
@@ -761,7 +767,11 @@ function xml_import(){
 		$post_exists = post_exists($post_title);
 		if($post_type == 'ac' && !$post_exists){
 			$level = (string)$item->xpath('category[@domain="niveau"]')[0]['nicename'][0];
+			$levelTerm = get_term_by('slug', $level, 'niveau');
+			$levelTermId = $levelTerm->term_id;
 			$skill = (string)$item->xpath('category[@domain="competence"]')[0]['nicename'][0];
+			$skillTerm = get_term_by('slug', $skill, 'competence');
+			$skillTermId = $skillTerm->term_id;
 			
 			// Create post 
 			$post_id = wp_insert_post(array(
@@ -771,8 +781,8 @@ function xml_import(){
 				'post_status' => 'publish',
 			));
 			// Add terms to post
-			wp_set_post_terms($post_id, $level, 'niveau');
-			wp_set_post_terms($post_id, $skill, 'competence');
+			wp_set_post_terms($post_id, $levelTermId, 'niveau');
+			wp_set_post_terms($post_id, $skillTermId, 'competence');
 			// Add meta
 			foreach($post_meta as $meta){
 				$meta_key = (string)$meta->xpath('wp:meta_key')[0];
