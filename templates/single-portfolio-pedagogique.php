@@ -64,8 +64,8 @@ function get_custom_post_slug() {
                 endif;
                 ?>
             </p>
-            <p class="date"><svg height="32px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-12{fill:#101820;}</style></defs><title/><g data-name="Layer 15" id="Layer_15"><path class="cls-12" d="M16,31A15,15,0,1,1,31,16,15,15,0,0,1,16,31ZM16,3A13,13,0,1,0,29,16,13,13,0,0,0,16,3Z"/><path class="cls-12" d="M20.24,21.66l-4.95-4.95A1,1,0,0,1,15,16V8h2v7.59l4.66,4.65Z"/></g></svg> <?php echo $pedagogie['temps_de_travail_estime'] ?>h du <?php echo get_field('date_de_debut'); ?> au <?php echo get_field('date_de_fin'); ?></p>
-            <p class="modalite"><svg height="32px" id="Layer_1_1_" style="enable-background:new 0 0 16 16;" version="1.1" viewBox="0 0 16 16" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M3.5,9h9C14.43,9,16,7.43,16,5.5S14.43,2,12.5,2H4c0-1.105-0.895-2-2-2S0,0.895,0,2c0,1.105,0.895,2,2,2  c0.738,0,1.376-0.405,1.723-1H12.5C13.878,3,15,4.122,15,5.5S13.878,8,12.5,8h-9C1.57,8,0,9.57,0,11.5S1.57,15,3.5,15h8.777  c0.346,0.595,0.984,1,1.723,1c1.105,0,2-0.895,2-2c0-1.105-0.895-2-2-2s-2,0.895-2,2H3.5C2.122,14,1,12.878,1,11.5S2.122,9,3.5,9z"/></svg> Modalité : <?php echo $pedagogie['cadre'] ?> / <?php echo $pedagogie['modalite'][0] ?></p>
+            <p class="date"><svg height="32px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-12{fill:#101820;}</style></defs><title/><g data-name="Layer 15" id="Layer_15"><path class="cls-12" d="M16,31A15,15,0,1,1,31,16,15,15,0,0,1,16,31ZM16,3A13,13,0,1,0,29,16,13,13,0,0,0,16,3Z"/><path class="cls-12" d="M20.24,21.66l-4.95-4.95A1,1,0,0,1,15,16V8h2v7.59l4.66,4.65Z"/></g></svg> <?php echo (!empty($pedagogie['temps_de_travail_estime'])) ? $pedagogie['temps_de_travail_estime'] : 'ND'; ?>h du <?php echo (!empty(get_field('date_de_debut'))) ? get_field('date_de_debut') : 'ND'; ?> au <?php echo (!empty(get_field('date_de_fin'))) ? get_field('date_de_fin') : 'ND'; ?></p>
+            <p class="modalite"><svg height="32px" id="Layer_1_1_" style="enable-background:new 0 0 16 16;" version="1.1" viewBox="0 0 16 16" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M3.5,9h9C14.43,9,16,7.43,16,5.5S14.43,2,12.5,2H4c0-1.105-0.895-2-2-2S0,0.895,0,2c0,1.105,0.895,2,2,2  c0.738,0,1.376-0.405,1.723-1H12.5C13.878,3,15,4.122,15,5.5S13.878,8,12.5,8h-9C1.57,8,0,9.57,0,11.5S1.57,15,3.5,15h8.777  c0.346,0.595,0.984,1,1.723,1c1.105,0,2-0.895,2-2c0-1.105-0.895-2-2-2s-2,0.895-2,2H3.5C2.122,14,1,12.878,1,11.5S2.122,9,3.5,9z"/></svg> Modalité : <?php echo (!empty($pedagogie['cadre'])) ? $pedagogie['cadre'] : 'ND' ?> / <?php echo (!empty($pedagogie['modalite'][0])) ? $pedagogie['modalite'][0] : 'ND'; ?></p>
         </div>
         
     </section>
@@ -85,6 +85,7 @@ function get_custom_post_slug() {
             <h2>ACs de la réalisation</h2>
             <ul>
                 <?php
+                if($acs != null) :
                 foreach($acs as $ac):
                     ?>
                     <li>
@@ -99,11 +100,11 @@ function get_custom_post_slug() {
                         </a>
                     </li>
                     <?php
-                endforeach;
+                endforeach; endif;
                 ?>
             </ul>
         </div>
-        <?php foreach($acs as $ac): ?>
+        <?php if($acs != null): foreach($acs as $ac): ?>
         <article>
             <header>
                 <h3 id="ac<?php echo $ac['apprentissage_critique'][0]->ID; ?>">
@@ -130,7 +131,7 @@ function get_custom_post_slug() {
                 <?php if(!empty($ac['traces_hypertexte'])): ?>
                     <a href="<?php echo $ac['traces_hypertexte']; ?>" target="_blank" class="external_link"><svg height="18px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><title/><g data-name="1" id="_1"><path d="M149.67,393A95.49,95.49,0,0,1,82.11,230l64.7-64.7a95.65,95.65,0,0,1,135.1,0h0a95.65,95.65,0,0,1,0,135.11l-64.69,64.69A95.23,95.23,0,0,1,149.67,393Zm64.69-225.69A65.29,65.29,0,0,0,168,186.49l-64.7,64.7A65.53,65.53,0,0,0,196,343.86l64.7-64.7a65.51,65.51,0,0,0-46.34-111.84Z"/><path d="M295.9,360.71a95,95,0,0,1-24.13-3.1,15,15,0,0,1,7.6-29,65.52,65.52,0,0,0,62.87-17.08l64.7-64.69a65.53,65.53,0,0,0-92.68-92.68l-64.69,64.7a65.84,65.84,0,0,0-17.08,62.89,15,15,0,0,1-29,7.55,95.92,95.92,0,0,1,24.9-91.65l64.69-64.7A95.53,95.53,0,1,1,428.15,268l-64.69,64.69A94.92,94.92,0,0,1,295.9,360.71Z"/></g></svg>Lien externe</a>
                 <?php endif; ?>
-                <?php if(count($ac['traces_images'])>0) : ?>
+                <?php if($ac['traces_images'] != null): if(count($ac['traces_images'])>0) : ?>
                     <div class="swiper">
                         <div class="swiper-wrapper">
                         <?php foreach($ac['traces_images'] as $image): ?>
@@ -150,14 +151,14 @@ function get_custom_post_slug() {
                         <!-- If we need scrollbar -->
                         <div class="swiper-scrollbar"></div>
                     </div>
-                <?php endif; ?>
+                <?php endif; endif; ?>
                 <div class="analyse">
                     <h4>Analyse</h4>
                     <?php echo apply_filters('the_content', $ac['analyse']); ?>
                 </div>
             </div>
         </article>
-        <?php endforeach; ?>    
+        <?php endforeach; endif; ?>    
         <?php
         // echo "<pre>";
         // var_dump($pedagogie);
