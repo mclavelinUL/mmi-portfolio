@@ -6,6 +6,7 @@ Ce plugin nécessite l'ajout d'ACF Pro dans le dossier vendor (vendor/advanced-c
 
 1. Passez par le menu Extensions -> Ajouter une extension -> Téléverser une extension
 2. Téléverser le fichier zip
+3. Avant d'activer l'extension, décompressez l'archive ACF Pro dans le dossier /vendor/advanced-custom-fields-pro/
 4. Activer l'extension
 5. Ajouter un lien personnalisé dans votre menu: http[s]://votreurl.ext/portfolio-pedagogique/realisation-mmi/
 6. Aller dans réglages -> permalien et enregistrer les permaliens.
