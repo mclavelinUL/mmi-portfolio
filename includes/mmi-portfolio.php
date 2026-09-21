@@ -68,6 +68,13 @@ function mmi_portfolio_register_rewrite_rules() {
         'top'
     );
 
+    // Archive portfolio pédagogique paginée (/page/2/...).
+    add_rewrite_rule(
+        '^portfolio-pedagogique/realisation-mmi/page/([0-9]{1,})/?$',
+        'index.php?post_type=realisation-mmi&custom_template=portfolio_pedagogique&paged=$matches[1]',
+        'top'
+    );
+
     // Fiche détail pédagogique.
     add_rewrite_rule(
         '^pedagogie-item/([^/]*)/?$',
@@ -89,22 +96,94 @@ function mmi_portfolio_register_query_vars( $vars ) {
 add_filter( 'query_vars', 'mmi_portfolio_register_query_vars' );
 
 /**
+ * Vrai ou faux : la requête courante est-elle une page du plugin ?
+ */
+function mmi_portfolio_is_plugin_view() {
+    return (bool) get_query_var( 'custom_template' );
+}
+
+/**
  * Assets du portfolio.
+ *
+ * Chargés uniquement sur les vues du plugin : l'ancienne version poussait
+ * Swiper et Font Awesome sur toutes les pages du site.
  */
 function mmi_portfolio_enqueue_assets() {
+    if ( ! mmi_portfolio_is_plugin_view() ) {
+        return;
+    }
+
     $base = plugin_dir_path( __FILE__ ) . '../templates/';
     $url  = plugin_dir_url( __FILE__ ) . '../templates/';
 
     $css_version = file_exists( $base . 'portfolio.css' ) ? filemtime( $base . 'portfolio.css' ) : MMI_PORTFOLIO_VERSION;
     $js_version  = file_exists( $base . 'portfolio.js' ) ? filemtime( $base . 'portfolio.js' ) : MMI_PORTFOLIO_VERSION;
 
-    wp_enqueue_style( 'swiper', 'https://unpkg.com/swiper@11/swiper-bundle.min.css', array(), '11' );
-    wp_enqueue_script( 'swiper', 'https://unpkg.com/swiper@11/swiper-bundle.min.js', array(), '11', true );
-    wp_enqueue_style( 'fontawesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
+    // Swiper n'est utile que sur la fiche détail.
+    if ( 'pedagogie_item' === get_query_var( 'custom_template' ) ) {
+        wp_enqueue_style( 'swiper', 'https://unpkg.com/swiper@11/swiper-bundle.min.css', array(), '11' );
+        wp_enqueue_script( 'swiper', 'https://unpkg.com/swiper@11/swiper-bundle.min.js', array(), '11', true );
+    }
+
     wp_enqueue_style( 'mmi-portfolio', $url . 'portfolio.css', array(), $css_version );
-    wp_enqueue_script( 'mmi-portfolio', $url . 'portfolio.js', array( 'swiper' ), $js_version, true );
+    wp_enqueue_script( 'mmi-portfolio', $url . 'portfolio.js', array(), $js_version, true );
 }
 add_action( 'wp_enqueue_scripts', 'mmi_portfolio_enqueue_assets' );
+
+/**
+ * Requête de l'archive pédagogique : pagination et filtres explicites.
+ *
+ * Le filtrage reposait jusqu'ici sur un effet de bord (les query vars de
+ * taxonomie interprétées par WordPress), ce qui rendait le comptage des
+ * résultats et la pagination incohérents.
+ */
+function mmi_portfolio_pre_get_posts( $query ) {
+    if ( is_admin() || ! $query->is_main_query() ) {
+        return;
+    }
+
+    if ( 'portfolio_pedagogique' !== $query->get( 'custom_template' ) ) {
+        return;
+    }
+
+    $query->set( 'posts_per_page', 12 );
+    $query->set( 'orderby', 'date' );
+    $query->set( 'order', 'DESC' );
+
+    $tax_query = array();
+
+    foreach ( array( 'niveau', 'competence' ) as $taxonomy ) {
+        if ( empty( $_GET[ $taxonomy ] ) ) {
+            continue;
+        }
+
+        $tax_query[] = array(
+            'taxonomy' => $taxonomy,
+            'field'    => 'slug',
+            'terms'    => sanitize_title( wp_unslash( $_GET[ $taxonomy ] ) ),
+        );
+    }
+
+    if ( $tax_query ) {
+        $tax_query['relation'] = 'AND';
+        $query->set( 'tax_query', $tax_query );
+    }
+}
+add_action( 'pre_get_posts', 'mmi_portfolio_pre_get_posts' );
+
+/**
+ * Flush unique des règles de réécriture au changement de version du plugin,
+ * pour éviter d'avoir à réenregistrer les permaliens à la main.
+ */
+function mmi_portfolio_maybe_flush_rewrites() {
+    if ( get_option( 'mmi_portfolio_rewrite_version' ) === MMI_PORTFOLIO_VERSION ) {
+        return;
+    }
+
+    flush_rewrite_rules();
+    update_option( 'mmi_portfolio_rewrite_version', MMI_PORTFOLIO_VERSION );
+}
+add_action( 'init', 'mmi_portfolio_maybe_flush_rewrites', 20 );
 
 /**
  * Affiche une icône SVG du plugin (templates/assets/<name>.svg).

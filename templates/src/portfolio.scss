@@ -1,0 +1,15 @@
+// -----------------------------------------------------------------------------
+// MMI Portfolio — feuille de style du plugin.
+//
+// Compilation :  npm run build   (ou npm run dev pour le mode watch)
+// Sortie      :  templates/portfolio.css
+//
+// Ne pas éditer templates/portfolio.css à la main : il est généré.
+// -----------------------------------------------------------------------------
+
+@use "fonts";
+@use "tokens";
+@use "base";
+@use "components";
+@use "archive";
+@use "single";

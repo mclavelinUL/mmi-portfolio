@@ -1,0 +1,80 @@
+// -----------------------------------------------------------------------------
+// Jetons de design — MMI Portfolio
+// Direction : sobre et éditoriale. L'interface s'efface, les traces des
+// étudiants portent la couleur.
+//
+// Tous les jetons sont portés par .mmi-portfolio et non par :root, pour rester
+// encapsulés : le plugin ne fuit pas sur le reste du site, et un thème peut
+// les redéfinir en surchargeant cette seule classe.
+// -----------------------------------------------------------------------------
+
+.mmi-portfolio {
+    // --- Couleurs -----------------------------------------------------------
+    --mmi-ink: #14171c;          // texte principal
+    --mmi-ink-2: #4a515c;        // texte secondaire
+    --mmi-ink-3: #767d89;        // texte tertiaire, légendes
+    --mmi-on-accent: #ffffff;
+
+    --mmi-bg: #ffffff;
+    --mmi-bg-sunken: #f7f8fa;    // fonds de sections, pied de carte
+    --mmi-line: #e2e5ea;
+    --mmi-line-strong: #cdd2da;
+
+    --mmi-accent: #23405c;       // encre bleutée, héritée de l'ancienne palette
+    --mmi-accent-hover: #16293b;
+    --mmi-accent-soft: #edf2f7;  // fonds de badges
+
+    --mmi-gauge: #b4762a;        // niveau estimé (ambre sobre)
+    --mmi-gauge-track: #e6e8ec;
+
+    --mmi-focus: #2f6bb0;        // anneau de focus, contraste AA sur blanc
+
+    // --- Typographie --------------------------------------------------------
+    // Serif variable auto-hébergée pour les titres (aucun appel à Google Fonts),
+    // pile système pour le corps : zéro requête, rendu natif sur chaque OS.
+    --mmi-font-display: "Source Serif 4 Variable", "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mmi-font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    --mmi-text-xs: 0.75rem;
+    --mmi-text-sm: 0.875rem;
+    --mmi-text-base: 1rem;
+    --mmi-text-lg: 1.125rem;
+
+    // Échelle fluide : pas de palier brutal entre mobile et desktop.
+    --mmi-text-h1: clamp(2rem, 1.35rem + 2.6vw, 3.25rem);
+    --mmi-text-h2: clamp(1.5rem, 1.3rem + 0.85vw, 2rem);
+    --mmi-text-h3: clamp(1.125rem, 1.05rem + 0.35vw, 1.375rem);
+    --mmi-text-lede: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+
+    --mmi-leading-tight: 1.2;
+    --mmi-leading-snug: 1.4;
+    --mmi-leading-normal: 1.65;
+
+    // --- Espacements (échelle 4px) ------------------------------------------
+    --mmi-space-1: 0.25rem;
+    --mmi-space-2: 0.5rem;
+    --mmi-space-3: 0.75rem;
+    --mmi-space-4: 1rem;
+    --mmi-space-5: 1.5rem;
+    --mmi-space-6: 2rem;
+    --mmi-space-7: 3rem;
+    --mmi-space-8: 4rem;
+    --mmi-space-9: 6rem;
+
+    // --- Formes -------------------------------------------------------------
+    --mmi-radius-sm: 4px;
+    --mmi-radius: 8px;
+    --mmi-radius-lg: 14px;
+    --mmi-radius-pill: 999px;
+
+    --mmi-shadow-sm: 0 1px 2px rgba(20, 23, 28, 0.06), 0 1px 3px rgba(20, 23, 28, 0.04);
+    --mmi-shadow: 0 2px 4px rgba(20, 23, 28, 0.05), 0 8px 24px rgba(20, 23, 28, 0.08);
+    --mmi-shadow-lg: 0 4px 8px rgba(20, 23, 28, 0.06), 0 16px 40px rgba(20, 23, 28, 0.12);
+
+    // --- Gabarit ------------------------------------------------------------
+    --mmi-container: 76rem;
+    --mmi-measure: 68ch;         // longueur de ligne confortable pour les analyses
+    --mmi-gutter: clamp(1rem, 0.5rem + 2.5vw, 3rem);
+
+    --mmi-transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}

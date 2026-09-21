@@ -1,0 +1,363 @@
+// -----------------------------------------------------------------------------
+// Fiche détail d'une réalisation.
+// -----------------------------------------------------------------------------
+
+.mmi-single {
+    padding-bottom: var(--mmi-space-9);
+
+    // --- Fil d'Ariane -------------------------------------------------------
+    &__breadcrumb {
+        padding-block: var(--mmi-space-4);
+        font-size: var(--mmi-text-sm);
+
+        a {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--mmi-space-2);
+            color: var(--mmi-ink-2);
+            text-decoration: none;
+
+            &:hover {
+                color: var(--mmi-accent);
+            }
+        }
+    }
+
+    // --- Hero ---------------------------------------------------------------
+    &__hero {
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        min-height: clamp(18rem, 12rem + 22vw, 30rem);
+        border-radius: var(--mmi-radius-lg);
+        overflow: hidden;
+        background: var(--mmi-accent);
+        color: var(--mmi-on-accent);
+
+        &--plain {
+            min-height: 0;
+            background: none;
+            color: inherit;
+            border-radius: 0;
+            padding-top: var(--mmi-space-4);
+        }
+    }
+
+    &__hero-image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    // Dégradé de lisibilité : remplace le text-shadow blanc sur quatre
+    // directions, qui devenait illisible selon l'image.
+    &__hero-scrim {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to top,
+            rgba(10, 14, 20, 0.85) 0%,
+            rgba(10, 14, 20, 0.55) 35%,
+            rgba(10, 14, 20, 0.1) 70%,
+            rgba(10, 14, 20, 0) 100%
+        );
+    }
+
+    &__hero-inner {
+        position: relative;
+        width: 100%;
+        padding: var(--mmi-space-6) var(--mmi-gutter);
+    }
+
+    &__title {
+        font-size: var(--mmi-text-h1);
+        color: inherit;
+        max-width: 24ch;
+    }
+
+    &__hero--plain &__title {
+        color: var(--mmi-ink);
+    }
+
+    // --- Bandeau de métadonnées --------------------------------------------
+    &__meta {
+        padding-block: var(--mmi-space-5);
+        border-bottom: 1px solid var(--mmi-line);
+        margin-bottom: var(--mmi-space-7);
+    }
+
+    // --- Contenu ------------------------------------------------------------
+    &__intro {
+        margin-bottom: var(--mmi-space-8);
+        font-size: var(--mmi-text-lede);
+        color: var(--mmi-ink);
+    }
+
+    &__section-title {
+        font-size: var(--mmi-text-h2);
+        padding-bottom: var(--mmi-space-3);
+        border-bottom: 1px solid var(--mmi-line);
+        margin-bottom: var(--mmi-space-6);
+    }
+
+    // --- Gabarit deux colonnes ---------------------------------------------
+    // Le sommaire devient une colonne collante, à la place de l'ancien panneau
+    // en position:fixed révélé au survol (inatteignable au tactile).
+    &__layout {
+        display: grid;
+        // minmax(0, 1fr) et non 1fr : une colonne « auto » laisse sa largeur
+        // indéfinie, et le carrousel (largeur en %, ratio fixe) part alors en
+        // boucle de calcul — la page atteignait 33 millions de pixels de haut.
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--mmi-space-6);
+        align-items: start;
+    }
+
+    &__traces {
+        min-width: 0;
+    }
+
+    @media (min-width: 64rem) {
+        &__layout {
+            grid-template-columns: minmax(0, 1fr) 17rem;
+            gap: var(--mmi-space-8);
+        }
+
+        &__toc {
+            position: sticky;
+            top: var(--mmi-space-5);
+            order: 2;
+        }
+
+        &__traces {
+            order: 1;
+        }
+    }
+}
+
+// --- Sommaire des apprentissages critiques -----------------------------------
+.mmi-toc {
+    border: 1px solid var(--mmi-line);
+    border-radius: var(--mmi-radius-lg);
+    background: var(--mmi-bg-sunken);
+    overflow: hidden;
+
+    &__summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--mmi-space-3);
+        padding: var(--mmi-space-4) var(--mmi-space-5);
+        font-size: var(--mmi-text-sm);
+        font-weight: 600;
+        cursor: pointer;
+        list-style: none;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &::after {
+            content: "";
+            width: 0.6rem;
+            height: 0.6rem;
+            border-right: 2px solid var(--mmi-ink-2);
+            border-bottom: 2px solid var(--mmi-ink-2);
+            transform: rotate(45deg);
+            transition: transform var(--mmi-transition);
+        }
+    }
+
+    &[open] &__summary::after {
+        transform: rotate(-135deg);
+    }
+
+    &__list {
+        list-style: none;
+        padding: 0 var(--mmi-space-3) var(--mmi-space-3);
+        margin: 0;
+    }
+
+    &__link {
+        display: block;
+        padding: var(--mmi-space-3);
+        border-radius: var(--mmi-radius);
+        border-left: 2px solid transparent;
+        color: var(--mmi-ink-2);
+        font-size: var(--mmi-text-sm);
+        line-height: var(--mmi-leading-snug);
+        text-decoration: none;
+        transition: background var(--mmi-transition), color var(--mmi-transition), border-color var(--mmi-transition);
+
+        &:hover {
+            background: var(--mmi-bg);
+            color: var(--mmi-ink);
+        }
+
+        // Position de lecture courante, alimentée par l'IntersectionObserver.
+        &.is-current {
+            background: var(--mmi-bg);
+            border-left-color: var(--mmi-accent);
+            color: var(--mmi-ink);
+            font-weight: 600;
+        }
+    }
+
+    &__label {
+        display: block;
+    }
+
+    &__competence {
+        display: block;
+        margin-top: var(--mmi-space-1);
+        font-size: var(--mmi-text-xs);
+        font-weight: 400;
+        color: var(--mmi-ink-3);
+    }
+
+    // Sur grand écran, le sommaire est toujours déplié : le <details> ne sert
+    // plus que de repli mobile.
+    @media (min-width: 64rem) {
+        &__summary {
+            cursor: default;
+            pointer-events: none;
+
+            &::after {
+                display: none;
+            }
+        }
+    }
+}
+
+// --- Bloc d'apprentissage critique -------------------------------------------
+.mmi-ac {
+    padding-block: var(--mmi-space-6);
+    border-top: 1px solid var(--mmi-line);
+
+    &:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+    }
+
+    &__header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--mmi-space-3) var(--mmi-space-5);
+        margin-bottom: var(--mmi-space-4);
+    }
+
+    &__heading {
+        flex: 1 1 20rem;
+        min-width: 0;
+    }
+
+    &__title {
+        font-size: var(--mmi-text-h3);
+        margin-bottom: var(--mmi-space-2);
+    }
+
+    &__description {
+        font-size: var(--mmi-text-sm);
+        color: var(--mmi-ink-2);
+        max-width: var(--mmi-measure);
+    }
+
+    &__aside {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--mmi-space-3);
+    }
+
+    &__link {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--mmi-space-2);
+        margin-bottom: var(--mmi-space-5);
+        font-size: var(--mmi-text-sm);
+        font-weight: 600;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    &__analyse {
+        margin-top: var(--mmi-space-5);
+    }
+
+    &__analyse-title {
+        font-size: var(--mmi-text-sm);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--mmi-ink-3);
+        font-family: var(--mmi-font-body);
+        margin-bottom: var(--mmi-space-3);
+    }
+}
+
+// --- Carrousel de traces ------------------------------------------------------
+.mmi-gallery {
+    position: relative;
+    margin-bottom: var(--mmi-space-5);
+
+    .swiper-slide {
+        height: auto;
+    }
+
+    &__figure {
+        margin: 0;
+        border: 1px solid var(--mmi-line);
+        border-radius: var(--mmi-radius);
+        overflow: hidden;
+        background: var(--mmi-bg-sunken);
+    }
+
+    &__image {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 50%;
+        background: var(--mmi-bg);
+        color: var(--mmi-ink);
+        box-shadow: var(--mmi-shadow-sm);
+        border: 1px solid var(--mmi-line);
+        transition: background var(--mmi-transition);
+
+        &::after {
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        &:hover {
+            background: var(--mmi-bg-sunken);
+        }
+    }
+
+    .swiper-pagination {
+        position: static;
+        margin-top: var(--mmi-space-3);
+    }
+
+    .swiper-pagination-bullet {
+        background: var(--mmi-ink-3);
+        opacity: 0.35;
+    }
+
+    .swiper-pagination-bullet-active {
+        background: var(--mmi-accent);
+        opacity: 1;
+    }
+}

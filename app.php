@@ -2,7 +2,7 @@
 /*
  * Plugin Name: MMI Portfolio
  * Description: Plugin pour la gestion du portfolio en BUT MMI
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Mathias Clavelin
  * Text Domain: mmi-portfolio
  * Requires at least: 6.0
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     die;
 }
 
-define( 'MMI_PORTFOLIO_VERSION', '1.1.0' );
+define( 'MMI_PORTFOLIO_VERSION', '1.2.0' );
 define( 'MMI_PORTFOLIO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MMI_PORTFOLIO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -25,6 +25,7 @@ require_once MMI_PORTFOLIO_PATH . 'includes/mmi-portfolio-loader.php';
 require_once MMI_PORTFOLIO_PATH . 'data/mmi-portfolio-data.php';
 
 // Logic
+require_once MMI_PORTFOLIO_PATH . 'includes/mmi-portfolio-helpers.php';
 require_once MMI_PORTFOLIO_PATH . 'includes/mmi-portfolio.php';
 
 /**
