@@ -38,7 +38,7 @@ if ( ! file_exists( MY_ACF_PATH . 'acf.php' ) ) {
 include_once MY_ACF_PATH . 'acf.php';
 
 // Corrige les URL des assets d'ACF embarqué.
-add_filter( 'acf/settings/url', 'my_acf_settings_url' );
-function my_acf_settings_url( $url ) {
+add_filter( 'acf/settings/url', 'mmi_portfolio_acf_settings_url' );
+function mmi_portfolio_acf_settings_url( $url ) {
     return MY_ACF_URL;
 }
