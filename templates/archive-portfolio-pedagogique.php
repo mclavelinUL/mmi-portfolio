@@ -1,71 +1,102 @@
-<?php get_header(); ?>
+<?php
+/**
+ * Archive du portfolio pédagogique.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    die;
+}
+
+get_header();
+
+$selected_niveau     = isset( $_GET['niveau'] ) ? sanitize_title( wp_unslash( $_GET['niveau'] ) ) : '';
+$selected_competence = isset( $_GET['competence'] ) ? sanitize_title( wp_unslash( $_GET['competence'] ) ) : '';
+
+$niveaux = get_terms(
+    array(
+        'taxonomy'   => 'niveau',
+        'hide_empty' => false,
+    )
+);
+if ( is_wp_error( $niveaux ) ) {
+    $niveaux = array();
+}
+
+$competences = get_terms(
+    array(
+        'taxonomy'   => 'competence',
+        'hide_empty' => false,
+    )
+);
+if ( is_wp_error( $competences ) ) {
+    $competences = array();
+}
+?>
 <main class="portfolio-pedagogique-archive">
     <h1>Portfolio pédagogique</h1>
-    <section class="filtres">
-        <?php
 
-        $base_url = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on' ? 'https' : 'http' ) . '://' .  $_SERVER['HTTP_HOST'];
-        $url = $base_url . $_SERVER["REQUEST_URI"];
-        ?>
-        <form action="<?php echo $url; ?>" method="get" id="filtres">
+    <section class="filtres">
+        <?php // action="" : le navigateur soumet sur l'URL courante, sans réinjecter $_SERVER. ?>
+        <form action="" method="get" id="filtres">
             <fieldset>
-                <!-- <label for="niveau">Niveau</label> -->
                 <div class="level select">
+                    <label class="screen-reader-text" for="niveau">Filtrer par niveau</label>
                     <select name="niveau" id="niveau">
                         <option value="">Tous les niveaux</option>
-                        <?php
-                            $niveaux = get_terms('niveau');
-                            foreach ($niveaux as $niveau) {
-                                ?>
-                                <option value="<?php echo $niveau->slug; ?>" <?php echo (isset($_GET['niveau']) && $niveau->slug == $_GET['niveau']) ? "selected" : ""; ?>>
-                                    <?php echo $niveau->name; ?>
-                                </option>
-                                <?php
-                            }
-                        ?>
+                        <?php foreach ( $niveaux as $niveau ) : ?>
+                            <option value="<?php echo esc_attr( $niveau->slug ); ?>" <?php selected( $selected_niveau, $niveau->slug ); ?>>
+                                <?php echo esc_html( $niveau->name ); ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </fieldset>
             <fieldset>
-                <!-- <label for="competence">Compétence</label> -->
                 <div class="skill select">
+                    <label class="screen-reader-text" for="competence">Filtrer par compétence</label>
                     <select name="competence" id="competence">
                         <option value="">Toutes les compétences</option>
-                        <?php
-                            $competences = get_terms('competence');
-                            foreach ($competences as $competence) {
-                                ?>
-                                <option value="<?php echo $competence->slug; ?>" <?php echo (isset($_GET['competence']) && $competence->slug == $_GET['competence']) ? "selected" : ""; ?>>
-                                    <?php echo $competence->name; ?>
-                                </option>
-                                <?php
-                            }
-                        ?>
+                        <?php foreach ( $competences as $competence ) : ?>
+                            <option value="<?php echo esc_attr( $competence->slug ); ?>" <?php selected( $selected_competence, $competence->slug ); ?>>
+                                <?php echo esc_html( $competence->name ); ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </fieldset>
+            <noscript><button type="submit">Filtrer</button></noscript>
         </form>
     </section>
+
     <section class="realisations">
-    <?php
-        // loop trough posts
-        if (have_posts()):
-            while (have_posts()):
+        <?php
+        if ( have_posts() ) :
+            while ( have_posts() ) :
                 the_post();
-                $pedago = get_field('pedagogie');
+
+                $thumbnail  = get_the_post_thumbnail_url( get_the_ID(), 'large' );
+                $date_debut = get_field( 'date_de_debut' );
+                $date_fin   = get_field( 'date_de_fin' );
+                $style      = $thumbnail ? ' style="background-image: url(' . esc_url( $thumbnail ) . ')"' : '';
                 ?>
-                <a href="<?php echo site_url() . '/pedagogie-item/' . $post->post_name; ?>">
-                <article class="post" style="background-image: url(<?php echo get_the_post_thumbnail_url(); ?>)">
-                    <h2><?php the_title(); ?><span>Du <?php the_field('date_de_debut'); ?> au <?php the_field('date_de_fin'); ?></span></h2>
-                    <!-- <figure>
-                        <?php the_post_thumbnail(); ?>
-                    </figure> -->
-                </article>
+                <a href="<?php echo esc_url( site_url( '/pedagogie-item/' . get_post_field( 'post_name', get_the_ID() ) ) ); ?>">
+                    <article class="post"<?php echo $style; // phpcs:ignore WordPress.Security.EscapeOutput -- déjà échappé ci-dessus. ?>>
+                        <h2>
+                            <?php the_title(); ?>
+                            <?php if ( $date_debut || $date_fin ) : ?>
+                                <span>Du <?php echo esc_html( $date_debut ? $date_debut : 'ND' ); ?> au <?php echo esc_html( $date_fin ? $date_fin : 'ND' ); ?></span>
+                            <?php endif; ?>
+                        </h2>
+                    </article>
                 </a>
                 <?php
             endwhile;
+        else :
+            ?>
+            <p class="aucune-realisation">Aucune réalisation ne correspond à ces filtres.</p>
+            <?php
         endif;
-    ?>
+        ?>
     </section>
 </main>
 <?php get_footer(); ?>

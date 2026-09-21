@@ -730,76 +730,185 @@ add_action( 'init', function() {
 
 
 
-function xml_import(){
-	$xml = simplexml_load_file(__DIR__ . '/all_content.xml','SimpleXMLElement', LIBXML_NOCDATA);
-	$xml->registerXPathNamespace('wp', 'http://wordpress.org/export/1.2/');
-	$terms = $xml->channel->xpath('//wp:term');
-	$items = $xml->channel->xpath('//item');
-	$taxonomies = array(
-		'competence',
-		'domaine',
-		'niveau',
+/**
+ * Import one-shot du contenu pédagogique (apprentissages critiques + termes).
+ *
+ * ATTENTION : cette fonction écrit en base. Elle ne doit JAMAIS être branchée sur
+ * un hook front (« wp », « init »…) : elle est déclenchée une seule fois après
+ * l'activation du plugin, ou manuellement via WP-CLI :
+ *
+ *     wp mmi-portfolio import
+ *
+ * @return array Compteurs { terms, posts }.
+ */
+function mmi_portfolio_xml_import() {
+	$counts = array(
+		'terms' => 0,
+		'posts' => 0,
 	);
-	
-	foreach($terms as $term){
-		//Get value of wp:term_name inside this node
-		$term_name = $term->xpath('wp:term_name');
-		$term_taxonomy = $term->xpath('wp:term_taxonomy');
-		// Check if term exists
-		
-		$term_exists = term_exists((string)$term_name[0], (string)$term_taxonomy[0]);
-		// Create term if it doesn't exist
-		if(!$term_exists && in_array($term_taxonomy[0], $taxonomies)){
-			$term_id = wp_insert_term((string)$term_name[0], (string)$term_taxonomy[0]);
-			
-		}
-		
+
+	if ( ! function_exists( 'post_exists' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/post.php';
 	}
-	
-	foreach($items as $item){
-		$post_type = (string)$item->xpath('wp:post_type')[0];
-		$post_title = (string)$item->title;
-		$post_content = (string)$item->xpath('content:encoded')[0];
-		$post_meta = $item->xpath('wp:postmeta');
-		
-		
-		// Check if post exists
-		$post_exists = post_exists($post_title);
-		if($post_type == 'ac' && !$post_exists){
-			$level = (string)$item->xpath('category[@domain="niveau"]')[0]['nicename'][0];
-			$levelTerm = get_term_by('slug', $level, 'niveau');
-			$levelTermId = $levelTerm->term_id;
-			$skill = (string)$item->xpath('category[@domain="competence"]')[0]['nicename'][0];
-			$skillTerm = get_term_by('slug', $skill, 'competence');
-			$skillTermId = $skillTerm->term_id;
-			
-			// Create post 
-			$post_id = wp_insert_post(array(
-				'post_title' => $post_title,
-				'post_type' => $post_type,
+
+	$file = __DIR__ . '/all_content.xml';
+	if ( ! file_exists( $file ) ) {
+		return $counts;
+	}
+
+	$xml = simplexml_load_file( $file, 'SimpleXMLElement', LIBXML_NOCDATA );
+	if ( false === $xml ) {
+		return $counts;
+	}
+
+	$xml->registerXPathNamespace( 'wp', 'http://wordpress.org/export/1.2/' );
+	$terms = $xml->channel->xpath( '//wp:term' );
+	$items = $xml->channel->xpath( '//item' );
+
+	$taxonomies = array( 'competence', 'domaine', 'niveau' );
+
+	foreach ( (array) $terms as $term ) {
+		$term_name     = $term->xpath( 'wp:term_name' );
+		$term_taxonomy = $term->xpath( 'wp:term_taxonomy' );
+
+		if ( empty( $term_name ) || empty( $term_taxonomy ) ) {
+			continue;
+		}
+
+		$term_name     = (string) $term_name[0];
+		$term_taxonomy = (string) $term_taxonomy[0];
+
+		if ( ! in_array( $term_taxonomy, $taxonomies, true ) ) {
+			continue;
+		}
+
+		if ( term_exists( $term_name, $term_taxonomy ) ) {
+			continue;
+		}
+
+		$inserted = wp_insert_term( $term_name, $term_taxonomy );
+		if ( ! is_wp_error( $inserted ) ) {
+			$counts['terms']++;
+		}
+	}
+
+	foreach ( (array) $items as $item ) {
+		$post_type = $item->xpath( 'wp:post_type' );
+		if ( empty( $post_type ) || 'ac' !== (string) $post_type[0] ) {
+			continue;
+		}
+
+		$post_title = (string) $item->title;
+		if ( '' === $post_title || post_exists( $post_title ) ) {
+			continue;
+		}
+
+		$content     = $item->xpath( 'content:encoded' );
+		$post_content = empty( $content ) ? '' : (string) $content[0];
+
+		$post_id = wp_insert_post(
+			array(
+				'post_title'   => $post_title,
+				'post_type'    => 'ac',
 				'post_content' => $post_content,
-				'post_status' => 'publish',
-			));
-			// Add terms to post
-			wp_set_post_terms($post_id, $levelTermId, 'niveau');
-			wp_set_post_terms($post_id, $skillTermId, 'competence');
-			// Add meta
-			foreach($post_meta as $meta){
-				$meta_key = (string)$meta->xpath('wp:meta_key')[0];
-				$meta_value = (string)$meta->xpath('wp:meta_value')[0];
-				if($meta_key == 'competence'){
-					update_field('competence', $meta_value, $post_id);
-				}
-				if($meta_key == 'niveau'){
-					update_field('niveau', $meta_value, $post_id);
-				}
-				
+				'post_status'  => 'publish',
+			),
+			true
+		);
+
+		if ( is_wp_error( $post_id ) ) {
+			continue;
+		}
+
+		$counts['posts']++;
+
+		// Termes (niveau / compétence).
+		foreach ( array( 'niveau', 'competence' ) as $taxonomy ) {
+			$category = $item->xpath( 'category[@domain="' . $taxonomy . '"]' );
+			if ( empty( $category ) ) {
+				continue;
+			}
+
+			$slug = (string) $category[0]['nicename'];
+			$term = get_term_by( 'slug', $slug, $taxonomy );
+			if ( $term && ! is_wp_error( $term ) ) {
+				wp_set_post_terms( $post_id, array( (int) $term->term_id ), $taxonomy );
 			}
 		}
-		
-		
+
+		// Champs ACF.
+		if ( function_exists( 'update_field' ) ) {
+			foreach ( (array) $item->xpath( 'wp:postmeta' ) as $meta ) {
+				$meta_key   = $meta->xpath( 'wp:meta_key' );
+				$meta_value = $meta->xpath( 'wp:meta_value' );
+
+				if ( empty( $meta_key ) || empty( $meta_value ) ) {
+					continue;
+				}
+
+				$meta_key = (string) $meta_key[0];
+				if ( in_array( $meta_key, array( 'competence', 'niveau' ), true ) ) {
+					update_field( $meta_key, (string) $meta_value[0], $post_id );
+				}
+			}
+		}
 	}
-	
-	
+
+	return $counts;
 }
-add_action('wp', 'xml_import');
+
+/**
+ * Déclenche l'import une seule fois, après activation, côté admin uniquement
+ * (les CPT et taxonomies ne sont pas encore enregistrés pendant le hook
+ * d'activation lui-même).
+ */
+function mmi_portfolio_maybe_run_import() {
+	if ( ! get_option( 'mmi_portfolio_pending_import' ) ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'activate_plugins' ) ) {
+		return;
+	}
+
+	// Supprimé avant l'import : en cas d'erreur fatale, on ne boucle pas.
+	delete_option( 'mmi_portfolio_pending_import' );
+
+	$counts = mmi_portfolio_xml_import();
+
+	update_option( 'mmi_portfolio_import_done', current_time( 'mysql' ) );
+	set_transient( 'mmi_portfolio_import_notice', $counts, 60 );
+}
+add_action( 'admin_init', 'mmi_portfolio_maybe_run_import' );
+
+/**
+ * Retour visuel après l'import.
+ */
+function mmi_portfolio_import_notice() {
+	$counts = get_transient( 'mmi_portfolio_import_notice' );
+	if ( false === $counts ) {
+		return;
+	}
+
+	delete_transient( 'mmi_portfolio_import_notice' );
+
+	printf(
+		'<div class="notice notice-success is-dismissible"><p><strong>MMI Portfolio</strong> : import terminé — %d terme(s) et %d apprentissage(s) critique(s) créé(s).</p></div>',
+		(int) $counts['terms'],
+		(int) $counts['posts']
+	);
+}
+add_action( 'admin_notices', 'mmi_portfolio_import_notice' );
+
+/**
+ * Commande WP-CLI pour rejouer l'import manuellement.
+ */
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	WP_CLI::add_command(
+		'mmi-portfolio import',
+		function () {
+			$counts = mmi_portfolio_xml_import();
+			WP_CLI::success( sprintf( 'Import terminé : %d terme(s), %d apprentissage(s) critique(s).', $counts['terms'], $counts['posts'] ) );
+		}
+	);
+}
