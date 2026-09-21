@@ -1,0 +1,56 @@
+name: Release
+
+# Pousser un tag `v1.3.0` publie la release et y attache le zip installable.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Compiler le CSS
+        run: npm run build
+
+      - name: Vérifier que le tag correspond à la version du plugin
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          PLUGIN_VERSION=$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*\(.*\)$/\1/p' app.php | head -1 | tr -d '[:space:]')
+          echo "tag=$TAG_VERSION plugin=$PLUGIN_VERSION"
+          if [ "$TAG_VERSION" != "$PLUGIN_VERSION" ]; then
+            echo "::error::Le tag $TAG_VERSION ne correspond pas à la version $PLUGIN_VERSION déclarée dans app.php"
+            exit 1
+          fi
+
+      - name: Contrôle syntaxique PHP
+        run: find app.php uninstall.php includes data templates -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Fabriquer le zip
+        run: npm run package
+
+      - name: Publier la release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/mmi-portfolio.zip
+          generate_release_notes: true
+          body: |
+            Requires at least: 6.0
+            Requires PHP: 7.4
+            Tested up to: 6.7
+
+            Installation : téléverser `mmi-portfolio.zip` dans Extensions → Ajouter.
+            Les sites qui ont déjà le plugin recevront la mise à jour automatiquement.

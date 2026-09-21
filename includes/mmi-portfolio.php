@@ -17,6 +17,12 @@ function mmi_portfolio_template_include( $template ) {
         return $template;
     }
 
+    // Les templates lisent des champs ACF : sans ACF, on laisse le thème
+    // afficher ce qu'il peut plutôt que de provoquer une erreur fatale.
+    if ( ! mmi_portfolio_has_acf() ) {
+        return $template;
+    }
+
     $templates = array(
         'portfolio'             => 'archive-portfolio.php',
         'portfolio_pedagogique' => 'archive-portfolio-pedagogique.php',
