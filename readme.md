@@ -100,3 +100,29 @@ droit de lecture sur le dépôt :
 ```php
 define( 'MMI_PORTFOLIO_GITHUB_TOKEN', 'ghp_...' );
 ```
+
+## Auto-évaluation
+
+L'auto-évaluation d'un apprentissage critique se fait sur **4 niveaux**
+(champ ACF `niveau_estime`). Le nombre de niveaux est porté par la constante
+`MMI_PORTFOLIO_NIVEAU_MAX` dans `app.php` ; le rendre configurable suppose
+d'ajuster aussi les bornes du champ ACF dans `data/mmi-portfolio-data.php`.
+
+Les portfolios créés avant la 1.4.0 utilisaient une échelle à 5 niveaux. La
+migration `mmi_portfolio_migrate_140` les convertit proportionnellement :
+
+| Ancien | 1 | 2 | 3 | 4 | 5 |
+|---|---|---|---|---|---|
+| Nouveau | 1 | 2 | 3 | 3 | 4 |
+
+La conversion est monotone : elle ne réordonne jamais deux auto-évaluations.
+Les valeurs d'origine sont sauvegardées dans l'option
+`mmi_portfolio_niveaux_backup` avant écriture, et la conversion est réversible :
+
+```bash
+wp mmi-portfolio restaurer-niveaux
+```
+
+La migration ne s'exécute qu'une fois (option `mmi_portfolio_niveaux_converted`).
+Ce verrou est indispensable : la table de conversion n'est pas idempotente, une
+seconde exécution ramènerait les 4 à 3.

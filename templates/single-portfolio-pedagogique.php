@@ -60,7 +60,7 @@ foreach ( $acs as $ac ) {
         'post'       => $ac_post,
         'anchor'     => 'ac-' . $ac_post->ID,
         'competence' => mmi_portfolio_first_term_name( $ac_post->ID, 'competence' ),
-        'niveau'     => isset( $ac['niveau_estime'] ) ? max( 0, min( 5, (int) $ac['niveau_estime'] ) ) : 0,
+        'niveau'     => isset( $ac['niveau_estime'] ) ? max( 0, min( MMI_PORTFOLIO_NIVEAU_MAX, (int) $ac['niveau_estime'] ) ) : 0,
         'lien'       => ! empty( $ac['traces_hypertexte'] ) ? $ac['traces_hypertexte'] : '',
         'images'     => ( ! empty( $ac['traces_images'] ) && is_array( $ac['traces_images'] ) ) ? $ac['traces_images'] : array(),
         'analyse'    => ! empty( $ac['analyse'] ) ? $ac['analyse'] : '',

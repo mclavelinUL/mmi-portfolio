@@ -89,10 +89,10 @@ function mmi_portfolio_format_period( $start, $end ) {
 /**
  * Jauge de niveau estimé, en remplacement des cinq étoiles Font Awesome.
  *
- * @param int $value Niveau de 0 à 5. 0 n'affiche rien.
+ * @param int $value Niveau de 0 à MMI_PORTFOLIO_NIVEAU_MAX. 0 n'affiche rien.
  * @param int $max   Nombre de segments.
  */
-function mmi_portfolio_gauge( $value, $max = 5 ) {
+function mmi_portfolio_gauge( $value, $max = MMI_PORTFOLIO_NIVEAU_MAX ) {
     $value = max( 0, min( (int) $max, (int) $value ) );
 
     if ( ! $value ) {

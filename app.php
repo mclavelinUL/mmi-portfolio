@@ -3,7 +3,7 @@
  * Plugin Name:       MMI Portfolio
  * Plugin URI:        https://github.com/mclavelinUL/mmi-portfolio
  * Description:       Gestion du portfolio pédagogique des étudiants en BUT MMI : réalisations, apprentissages critiques et traces.
- * Version:           1.3.0
+ * Version:           1.4.0
  * Author:            Mathias Clavelin
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -19,7 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
     die;
 }
 
-define( 'MMI_PORTFOLIO_VERSION', '1.3.0' );
+define( 'MMI_PORTFOLIO_VERSION', '1.4.0' );
+
+// Nombre de niveaux de l'auto-évaluation (échelle 1 à N).
+define( 'MMI_PORTFOLIO_NIVEAU_MAX', 4 );
 define( 'MMI_PORTFOLIO_FILE', __FILE__ );
 define( 'MMI_PORTFOLIO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MMI_PORTFOLIO_URL', plugin_dir_url( __FILE__ ) );

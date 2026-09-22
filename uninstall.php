@@ -16,6 +16,8 @@ $mmi_portfolio_options = array(
     'mmi_portfolio_rewrite_version',
     'mmi_portfolio_import_done',
     'mmi_portfolio_pending_import',
+    'mmi_portfolio_niveaux_converted',
+    'mmi_portfolio_niveaux_backup',
     'Activated_Plugin', // legacy
 );
 
@@ -27,5 +29,6 @@ foreach ( $mmi_portfolio_options as $option ) {
 delete_site_transient( 'mmi_portfolio_latest_release' );
 delete_transient( 'mmi_portfolio_import_notice' );
 delete_transient( 'mmi_portfolio_upgrading' );
+delete_transient( 'mmi_portfolio_niveaux_notice' );
 
 flush_rewrite_rules();
