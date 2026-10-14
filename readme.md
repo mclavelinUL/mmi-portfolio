@@ -4,14 +4,16 @@ Plugin WordPress pour la gestion du portfolio pédagogique en BUT MMI.
 
 Ce plugin nécessite l'ajout d'ACF Pro dans le dossier `vendor/advanced-custom-fields-pro`.
 
+## Prérequis
+1. L'extension ACF pro doit être installée et activée
+
 ## Installation
 
 1. Extensions → Ajouter une extension → Téléverser une extension
 2. Téléverser le fichier zip
-3. Avant d'activer l'extension, décompressez l'archive ACF Pro dans le dossier /vendor/advanced-custom-fields-pro/
-4. Activer l'extension
-5. Ajouter un lien personnalisé dans votre menu: http[s]://votreurl.ext/portfolio-pedagogique/realisation-mmi/
-6. Aller dans réglages -> permalien et enregistrer les permaliens.
+3. Activer l'extension
+4. Ajouter un lien personnalisé dans votre menu: http[s]://votreurl.ext/portfolio-pedagogique/realisation-mmi/
+5. Aller dans réglages -> permalien et enregistrer les permaliens.
 
 ## Utilisation
 
